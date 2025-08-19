@@ -75,6 +75,18 @@ export async function generate(options: GeneratorOptions) {
         ["prettier", "tsc"] as const,
       ),
     emitIsAbstract: parseStringBoolean(generatorConfig.emitIsAbstract) ?? false,
+    combineArgsTSFile: parseString(
+      generatorConfig.combineArgsTSFile,
+      "combineArgsTSFile",
+    ),
+    calculateSubTopicTSFile: parseString(
+      generatorConfig.calculateSubTopicTSFile,
+      "calculateSubTopicTSFile",
+    ),
+    postMutationActionTSFile: parseString(
+      generatorConfig.postMutationActionTSFile,
+      "postMutationActionTSFile",
+    ),
   };
   const internalConfig: InternalGeneratorOptions = {
     outputDirPath: outputDir,

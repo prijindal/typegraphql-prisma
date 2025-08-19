@@ -38,6 +38,7 @@ export const resolversFolderName = "resolvers";
 export const argsFolderName = "args";
 export const relationsResolversFolderName = "relations";
 export const crudResolversFolderName = "crud";
+export const subscriptionResolversFolderName = "subscription";
 
 export enum InputOmitSetting {
   Create = "create",

@@ -14,6 +14,7 @@ import {
   generateInputTypeClassFromType,
 } from "./type-class";
 import generateCrudResolverClassFromMapping from "./resolvers/full-crud";
+import generateSubscriptionResolverClassFromMapping from "./resolvers/full-subscription";
 import {
   resolversFolderName,
   relationsResolversFolderName,
@@ -23,6 +24,7 @@ import {
   enumsFolderName,
   modelsFolderName,
   argsFolderName,
+  subscriptionResolversFolderName,
 } from "./config";
 import {
   generateResolversBarrelFile,
@@ -482,6 +484,73 @@ export default async function generateCode(
         )
         .map(mapping => mapping.modelTypeName),
     );
+  }
+
+  if(dmmfDocument.shouldGenerateBlock("subscriptionResolvers")) {
+    log("Generating subscription resolvers...");
+    dmmfDocument.modelMappings.forEach(async mapping => {
+      const model = dmmfDocument.datamodel.models.find(
+        model => model.name === mapping.modelName,
+      )!;
+      generateSubscriptionResolverClassFromMapping(
+        project,
+        baseDirPath,
+        mapping,
+        model,
+        dmmfDocument,
+        options,
+      );
+      mapping.actions.forEach(async action => {
+        const model = dmmfDocument.datamodel.models.find(
+          model => model.name === mapping.modelName,
+        )!;
+        generateActionResolverClass(
+          project,
+          baseDirPath,
+          model,
+          action,
+          mapping,
+          dmmfDocument,
+          options,
+        );
+      });
+    });
+    const generateMappingData =
+      dmmfDocument.modelMappings.map<GenerateMappingData>(mapping => {
+        const model = dmmfDocument.datamodel.models.find(
+          model => model.name === mapping.modelName,
+        )!;
+        return {
+          modelName: model.typeName,
+          resolverName: mapping.subscriptionResolverName,
+          actionResolverNames: mapping.actions.map(it => it.actionResolverName),
+        };
+      });
+    const subscriptionResolversBarrelExportSourceFile = project.createSourceFile(
+      path.resolve(
+        baseDirPath,
+        resolversFolderName,
+        subscriptionResolversFolderName,
+        "resolvers-subscription.index.ts",
+      ),
+      undefined,
+      { overwrite: true },
+    );
+    generateResolversBarrelFile(
+      subscriptionResolversBarrelExportSourceFile,
+      generateMappingData,
+    );
+    const subscriptionResolversIndexSourceFile = project.createSourceFile(
+      path.resolve(
+        baseDirPath,
+        resolversFolderName,
+        subscriptionResolversFolderName,
+        "index.ts",
+      ),
+      undefined,
+      { overwrite: true },
+    );
+    generateResolversIndexFile(subscriptionResolversIndexSourceFile, "subscription", false);
   }
 
   log("Generate enhance map");

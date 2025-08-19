@@ -16,6 +16,9 @@ export interface ExternalGeneratorOptions {
   omitOutputFieldsByDefault?: string[];
   formatGeneratedCode?: boolean | "prettier" | "tsc";
   emitIsAbstract?: boolean;
+  combineArgsTSFile?: string;
+  calculateSubTopicTSFile?: string;
+  postMutationActionTSFile?: string;
 }
 
 export interface InternalGeneratorOptions {

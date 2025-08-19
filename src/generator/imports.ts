@@ -15,6 +15,7 @@ import {
   resolversFolderName,
   crudResolversFolderName,
   relationsResolversFolderName,
+  subscriptionResolversFolderName,
 } from "./config";
 import { GenerateMappingData } from "./types";
 import { GeneratorOptions } from "./options";
@@ -74,6 +75,9 @@ export function generateHelpersFileImport(sourceFile: SourceFile, level = 0) {
       "transformInfoIntoPrismaArgs",
       "getPrismaFromContext",
       "transformCountFieldIntoSelectRelationsCount",
+      "combineArgsWithContext",
+      "calculateSubTopicFromContext",
+      "postMutationAction"
     ],
   });
 }
@@ -216,6 +220,25 @@ export function generateIndexFile(
       ],
     });
   }
+  if(blocksToEmit.includes("subscriptionResolvers")) {
+    sourceFile.addExportDeclaration({
+      moduleSpecifier: `./${resolversFolderName}/${subscriptionResolversFolderName}`,
+    });
+    sourceFile.addImportDeclaration({
+      moduleSpecifier: `./${resolversFolderName}/${subscriptionResolversFolderName}/resolvers-subscription.index`,
+      namespaceImport: "subscriptionResolversImport",
+    });
+    sourceFile.addVariableStatement({
+      isExported: true,
+      declarationKind: VariableDeclarationKind.Const,
+      declarations: [
+        {
+          name: "subscriptionResolvers",
+          initializer: `Object.values(subscriptionResolversImport) as unknown as NonEmptyArray<Function>`,
+        },
+      ],
+    });
+  }
   if (hasSomeRelations && blocksToEmit.includes("relationResolvers")) {
     sourceFile.addExportDeclaration({
       moduleSpecifier: `./${resolversFolderName}/${relationsResolversFolderName}`,
@@ -259,6 +282,7 @@ export function generateIndexFile(
 
   if (
     blocksToEmit.includes("crudResolvers") ||
+    blocksToEmit.includes("subscriptionResolvers") ||
     (hasSomeRelations && blocksToEmit.includes("relationResolvers"))
   )
     sourceFile.addVariableStatement({
@@ -269,6 +293,7 @@ export function generateIndexFile(
           name: "resolvers",
           initializer: `[
             ${blocksToEmit.includes("crudResolvers") ? "...crudResolvers," : ""}
+            ${blocksToEmit.includes("subscriptionResolvers") ? "...subscriptionResolvers," : ""}
             ${
               hasSomeRelations && blocksToEmit.includes("relationResolvers")
                 ? "...relationResolvers,"
@@ -317,13 +342,17 @@ export function generateResolversActionsBarrelFile(
 
 export function generateResolversIndexFile(
   sourceFile: SourceFile,
-  type: "crud" | "relations",
+  type: "crud" | "relations" | "subscription",
   hasSomeArgs: boolean,
 ) {
   if (type === "crud") {
     sourceFile.addExportDeclarations([
       { moduleSpecifier: `./resolvers-actions.index` },
       { moduleSpecifier: `./resolvers-crud.index` },
+    ]);
+  } else if (type === "subscription") {
+    sourceFile.addExportDeclarations([
+      { moduleSpecifier: `./resolvers-subscription.index` },
     ]);
   } else {
     sourceFile.addExportDeclarations([

@@ -234,6 +234,7 @@ export namespace DMMF {
     actions: Action[];
     collectionName: string;
     resolverName: string;
+    subscriptionResolverName: string;
     modelTypeName: string;
   }>;
   export enum ModelAction {
@@ -261,7 +262,7 @@ export namespace DMMF {
     name: string;
     fieldName: string;
     kind: ModelAction;
-    operation: "Query" | "Mutation";
+    operation: "Query" | "Mutation" | "Subscription";
     prismaMethod: string;
     method: OutputSchemaField;
     argsTypeName: string | undefined;

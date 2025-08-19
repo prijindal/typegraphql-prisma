@@ -58,7 +58,7 @@ export function generateCrudResolverClassMethodDeclaration(
       action.kind === DMMF.ModelAction.aggregate
         ? [
             /* ts */ ` return getPrismaFromContext(ctx).${mapping.collectionName}.${action.prismaMethod}({
-              ...args,
+              ...combineArgsWithContext(args, ctx, "${mapping.modelName}", "${action.kind}"),
               ...transformInfoIntoPrismaArgs(info),
             });`,
           ]
@@ -66,16 +66,24 @@ export function generateCrudResolverClassMethodDeclaration(
           ? [
               /* ts */ ` const { _count, _avg, _sum, _min, _max } = transformInfoIntoPrismaArgs(info);`,
               /* ts */ ` return getPrismaFromContext(ctx).${mapping.collectionName}.${action.prismaMethod}({
-              ...args,
+              ...combineArgsWithContext(args, ctx, "${mapping.modelName}", "${action.kind}"),
               ...Object.fromEntries(
                 Object.entries({ _count, _avg, _sum, _min, _max }).filter(([_, v]) => v != null)
               ),
             });`,
             ]
-          : [
+          : action.operation === "Mutation" ? [
+              /* ts */ ` const { _count } = transformInfoIntoPrismaArgs(info);
+            const response = await getPrismaFromContext(ctx).${mapping.collectionName}.${action.prismaMethod}({
+              ...combineArgsWithContext(args, ctx, "${mapping.modelName}", "${action.kind}"),
+              ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
+            });
+            await postMutationAction(response, ctx, "${mapping.modelName}", "${action.kind}");
+            return response;`,
+          ] : [
               /* ts */ ` const { _count } = transformInfoIntoPrismaArgs(info);
             return getPrismaFromContext(ctx).${mapping.collectionName}.${action.prismaMethod}({
-              ...args,
+              ...combineArgsWithContext(args, ctx, "${mapping.modelName}", "${action.kind}"),
               ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
             });`,
             ],

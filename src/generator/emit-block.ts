@@ -4,7 +4,8 @@ export type EmitBlockKind =
   | "crudResolvers"
   | "relationResolvers"
   | "inputs"
-  | "outputs";
+  | "outputs"
+  | "subscriptionResolvers";
 
 export const ALL_EMIT_BLOCK_KINDS: EmitBlockKind[] = [
   "enums",
@@ -13,6 +14,7 @@ export const ALL_EMIT_BLOCK_KINDS: EmitBlockKind[] = [
   "relationResolvers",
   "inputs",
   "outputs",
+  "subscriptionResolvers"
 ];
 
 export const BLOCKS_DEPENDENCIES_MAP: Record<EmitBlockKind, EmitBlockKind[]> = {
@@ -20,6 +22,7 @@ export const BLOCKS_DEPENDENCIES_MAP: Record<EmitBlockKind, EmitBlockKind[]> = {
   models: ["enums"],
   crudResolvers: ["models", "enums", "outputs", "inputs"],
   relationResolvers: ["models", "enums", "inputs"],
+  subscriptionResolvers: ["models", "enums", "outputs", "inputs"],
   inputs: ["enums"],
   outputs: ["enums"],
 };
