@@ -486,7 +486,7 @@ export default async function generateCode(
     );
   }
 
-  if(dmmfDocument.shouldGenerateBlock("subscriptionResolvers")) {
+  if (dmmfDocument.shouldGenerateBlock("subscriptionResolvers")) {
     log("Generating subscription resolvers...");
     dmmfDocument.modelMappings.forEach(async mapping => {
       const model = dmmfDocument.datamodel.models.find(
@@ -526,16 +526,17 @@ export default async function generateCode(
           actionResolverNames: mapping.actions.map(it => it.actionResolverName),
         };
       });
-    const subscriptionResolversBarrelExportSourceFile = project.createSourceFile(
-      path.resolve(
-        baseDirPath,
-        resolversFolderName,
-        subscriptionResolversFolderName,
-        "resolvers-subscription.index.ts",
-      ),
-      undefined,
-      { overwrite: true },
-    );
+    const subscriptionResolversBarrelExportSourceFile =
+      project.createSourceFile(
+        path.resolve(
+          baseDirPath,
+          resolversFolderName,
+          subscriptionResolversFolderName,
+          "resolvers-subscription.index.ts",
+        ),
+        undefined,
+        { overwrite: true },
+      );
     generateResolversBarrelFile(
       subscriptionResolversBarrelExportSourceFile,
       generateMappingData,
@@ -550,7 +551,11 @@ export default async function generateCode(
       undefined,
       { overwrite: true },
     );
-    generateResolversIndexFile(subscriptionResolversIndexSourceFile, "subscription", false);
+    generateResolversIndexFile(
+      subscriptionResolversIndexSourceFile,
+      "subscription",
+      false,
+    );
   }
 
   log("Generate enhance map");

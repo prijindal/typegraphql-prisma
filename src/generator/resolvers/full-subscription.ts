@@ -1,7 +1,15 @@
-import { OptionalKind, MethodDeclarationStructure, Project, Writers } from "ts-morph";
+import {
+  OptionalKind,
+  MethodDeclarationStructure,
+  Project,
+  Writers,
+} from "ts-morph";
 import path from "path";
 
-import { resolversFolderName, subscriptionResolversFolderName } from "../config";
+import {
+  resolversFolderName,
+  subscriptionResolversFolderName,
+} from "../config";
 import {
   generateTypeGraphQLImport,
   generateArgsImports,
@@ -27,25 +35,32 @@ export default function generateSubscriptionResolverClassFromMapping(
   generateEnumFromDef(project, baseDirPath, {
     name: "ChangeOutputActionEnum",
     typeName: "ChangeOutputActionEnum",
-    valuesMap: [{
-      name: "CREATE",
-      value: "CREATE"
-    }, {
-      name: "DELETE",
-      value: "DELETE"
-    }, {
-      name: "UPDATE",
-      value: "UPDATE"
-    }, {
-      name: "CREATE_MANY",
-      value: "CREATE_MANY"
-    }, {
-      name: "UPDATE_MANY",
-      value: "UPDATE_MANY"
-    }, {
-      name: "DELETE_MANY",
-      value: "DELETE_MANY"
-    }],
+    valuesMap: [
+      {
+        name: "CREATE",
+        value: "CREATE",
+      },
+      {
+        name: "DELETE",
+        value: "DELETE",
+      },
+      {
+        name: "UPDATE",
+        value: "UPDATE",
+      },
+      {
+        name: "CREATE_MANY",
+        value: "CREATE_MANY",
+      },
+      {
+        name: "UPDATE_MANY",
+        value: "UPDATE_MANY",
+      },
+      {
+        name: "DELETE_MANY",
+        value: "DELETE_MANY",
+      },
+    ],
     docs: undefined,
   });
   generateOutputTypeClassFromType(
@@ -61,7 +76,7 @@ export default function generateSubscriptionResolverClassFromMapping(
           outputType: {
             isList: false,
             location: "enumTypes",
-            type: "ChangeOutputActionEnum"
+            type: "ChangeOutputActionEnum",
           },
           typeGraphQLType: "ChangeOutputActionEnum",
           fieldTSType: "ChangeOutputActionEnum",
@@ -75,15 +90,15 @@ export default function generateSubscriptionResolverClassFromMapping(
           outputType: {
             isList: false,
             location: "scalar",
-            type: "string"
+            type: "string",
           },
           typeGraphQLType: "String",
           fieldTSType: "string | undefined",
           isRequired: false,
-          argsTypeName: undefined
-        }
+          argsTypeName: undefined,
+        },
       ],
-      typeName: "ChangeOutput"
+      typeName: "ChangeOutput",
     },
     dmmfDocument,
   );
@@ -93,7 +108,10 @@ export default function generateSubscriptionResolverClassFromMapping(
     subscriptionResolversFolderName,
     model.typeName,
   );
-  const filePath = path.resolve(resolverDirPath, `${mapping.subscriptionResolverName}.ts`);
+  const filePath = path.resolve(
+    resolverDirPath,
+    `${mapping.subscriptionResolverName}.ts`,
+  );
   const sourceFile = project.createSourceFile(filePath, undefined, {
     overwrite: true,
   });
@@ -120,11 +138,14 @@ export default function generateSubscriptionResolverClassFromMapping(
       },
     ],
     methods: [
-      generateSubscriptionResolverClassMethodDeclaration(mapping, dmmfDocument, generatorOptions),
-    ]
+      generateSubscriptionResolverClassMethodDeclaration(
+        mapping,
+        dmmfDocument,
+        generatorOptions,
+      ),
+    ],
   });
 }
-
 
 export function generateSubscriptionResolverClassMethodDeclaration(
   mapping: DMMF.ModelMapping,
@@ -154,8 +175,6 @@ export function generateSubscriptionResolverClassMethodDeclaration(
         decorators: [{ name: "TypeGraphQL.Root", arguments: [] }],
       },
     ],
-    statements: [
-            /* ts */ ` return payload;`,
-    ]
+    statements: [/* ts */ ` return payload;`],
   };
 }

@@ -72,20 +72,22 @@ export function generateCrudResolverClassMethodDeclaration(
               ),
             });`,
             ]
-          : action.operation === "Mutation" ? [
-              /* ts */ ` const { _count } = transformInfoIntoPrismaArgs(info);
+          : action.operation === "Mutation"
+            ? [
+                /* ts */ ` const { _count } = transformInfoIntoPrismaArgs(info);
             const response = await getPrismaFromContext(ctx).${mapping.collectionName}.${action.prismaMethod}({
               ...combineArgsWithContext(args, ctx, "${mapping.modelName}", "${action.kind}"),
               ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
             });
             await postMutationAction(response, ctx, "${mapping.modelName}", "${action.kind}");
             return response;`,
-          ] : [
-              /* ts */ ` const { _count } = transformInfoIntoPrismaArgs(info);
+              ]
+            : [
+                /* ts */ ` const { _count } = transformInfoIntoPrismaArgs(info);
             return getPrismaFromContext(ctx).${mapping.collectionName}.${action.prismaMethod}({
               ...combineArgsWithContext(args, ctx, "${mapping.modelName}", "${action.kind}"),
               ...(_count && transformCountFieldIntoSelectRelationsCount(_count)),
             });`,
-            ],
+              ],
   };
 }

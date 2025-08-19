@@ -13,25 +13,25 @@ export function generateHelpersFile(
 ) {
   generateGraphQLInfoImport(sourceFile);
   generateGraphQLFieldsImport(sourceFile);
-  if(options.combineArgsTSFile) {
+  if (options.combineArgsTSFile) {
     sourceFile.addImportDeclaration({
       moduleSpecifier: options.combineArgsTSFile,
       namedImports: ["combineArgsWithContextHelper"],
-    })
+    });
   }
 
   if (options.calculateSubTopicTSFile) {
     sourceFile.addImportDeclaration({
       moduleSpecifier: options.calculateSubTopicTSFile,
       namedImports: ["calculateSubTopicFromContextHelper"],
-    })
+    });
   }
 
-  if(options.postMutationActionTSFile) {
+  if (options.postMutationActionTSFile) {
     sourceFile.addImportDeclaration({
       moduleSpecifier: options.postMutationActionTSFile,
       namedImports: ["postMutationActionHelper"],
-    })
+    });
   }
 
   sourceFile.addStatements(/* ts */ `
@@ -97,10 +97,10 @@ export function generateHelpersFile(
     }
   `);
 
-  if(options.combineArgsTSFile) {
+  if (options.combineArgsTSFile) {
     sourceFile.addStatements(/* ts */ `
       export const combineArgsWithContext = combineArgsWithContextHelper;
-    `)
+    `);
   } else {
     sourceFile.addStatements(/* ts */ `
       // You can create a file in the path specified inside combineArgsTSFile to use that combine logic
@@ -110,10 +110,10 @@ export function generateHelpersFile(
     `);
   }
 
-  if(options.calculateSubTopicTSFile) {
+  if (options.calculateSubTopicTSFile) {
     sourceFile.addStatements(/* ts */ `
       export const calculateSubTopicFromContext = calculateSubTopicFromContextHelper;
-    `)
+    `);
   } else {
     sourceFile.addStatements(/* ts */ `
       // You can create a file in the path specified inside calculateSubTopicFromContext to use that combine logic
@@ -123,10 +123,10 @@ export function generateHelpersFile(
     `);
   }
 
-  if(options.postMutationActionTSFile) {
+  if (options.postMutationActionTSFile) {
     sourceFile.addStatements(/* ts */ `
       export const postMutationAction = postMutationActionHelper;
-    `)
+    `);
   } else {
     sourceFile.addStatements(/* ts */ `
       // You can create a file in the path specified inside postMutationAction to use that combine logic

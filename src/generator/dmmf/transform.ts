@@ -404,7 +404,7 @@ function transformMapping(
       actions,
       collectionName: camelCase(mapping.model),
       resolverName,
-      subscriptionResolverName: `${modelTypeName}SubscriptionResolver`
+      subscriptionResolverName: `${modelTypeName}SubscriptionResolver`,
     };
   };
 }

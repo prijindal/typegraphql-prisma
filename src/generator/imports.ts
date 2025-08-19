@@ -77,7 +77,7 @@ export function generateHelpersFileImport(sourceFile: SourceFile, level = 0) {
       "transformCountFieldIntoSelectRelationsCount",
       "combineArgsWithContext",
       "calculateSubTopicFromContext",
-      "postMutationAction"
+      "postMutationAction",
     ],
   });
 }
@@ -220,7 +220,7 @@ export function generateIndexFile(
       ],
     });
   }
-  if(blocksToEmit.includes("subscriptionResolvers")) {
+  if (blocksToEmit.includes("subscriptionResolvers")) {
     sourceFile.addExportDeclaration({
       moduleSpecifier: `./${resolversFolderName}/${subscriptionResolversFolderName}`,
     });

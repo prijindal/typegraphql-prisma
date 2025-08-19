@@ -14,7 +14,7 @@ export const ALL_EMIT_BLOCK_KINDS: EmitBlockKind[] = [
   "relationResolvers",
   "inputs",
   "outputs",
-  "subscriptionResolvers"
+  "subscriptionResolvers",
 ];
 
 export const BLOCKS_DEPENDENCIES_MAP: Record<EmitBlockKind, EmitBlockKind[]> = {
