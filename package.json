@@ -1,8 +1,8 @@
 {
-  "name": "typegraphql-prisma",
-  "version": "0.28.0",
+  "name": "@prijindal/typegraphql-prisma",
+  "version": "0.29.1",
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "build": "tsc",
     "package:build": "./package.sh",
     "package:publish": "cd package *&& npm publish",
@@ -81,14 +81,14 @@
   },
   "author": {
     "name": "Michał Lytek",
-    "url": "https://github.com/MichalLytek"
+    "url": "https://github.com/prijindal"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MichalLytek/typegraphql-prisma.git"
+    "url": "https://github.com/prijindal/typegraphql-prisma.git"
   },
   "bugs": {
-    "url": "https://github.com/MichalLytek/typegraphql-prisma/issues"
+    "url": "https://github.com/prijindal/typegraphql-prisma/issues"
   },
   "keywords": [
     "type-graphql",
@@ -107,5 +107,5 @@
       "prettier --write"
     ]
   },
-  "private": true
+  "private": false
 }
